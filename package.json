@@ -1,0 +1,32 @@
+{
+  "name": "@device-management/device-engine",
+  "version": "0.0.1",
+  "description": "The software for step motor control.",
+  "license": "MIT",
+  "repository": "https://github.com/device-management/device-engine",
+  "author": "Tomasz Nocoń",
+  "files": [
+    "lib"
+  ],
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "scripts": {
+    "clean": "rimraf lib",
+    "build": "tsc --pretty"
+  },
+  "dependencies": {
+    "@device-management/device-base": "0.0.1",
+    "onoff": "1.1.2"
+  },
+  "devDependencies": {
+    "@types/node": "7.0.21",
+    "@types/mqtt": "0.0.34",
+    "@types/rx": "4.1.1",
+    "@types/onoff": "0.0.27",
+    "ts-node": "3.0.4",
+    "typescript": "2.3.2"
+  },
+  "engines": {
+    "node": ">=4.0.0"
+  }
+}

@@ -1,0 +1,25 @@
+#.travis.yml
+sudo: required
+
+language: node_js
+node_js:
+  - "7"
+
+services:
+  - docker
+
+branches:
+  only:
+    - develop
+    - master
+
+before_script:
+  - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+  - npm install
+
+script:
+  - npm run build
+  - docker build -t devicemanagment/device-engine .
+
+after_success:
+  - docker push devicemanagment/device-engine
