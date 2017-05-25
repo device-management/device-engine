@@ -1,4 +1,4 @@
-FROM resin/raspberry-pi-alpine-node:7-slim
+FROM armhf/node:7.8-slim
 
 LABEL maintainer "thom.nocon@gmail.com"
 
