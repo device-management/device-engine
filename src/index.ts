@@ -15,20 +15,20 @@ let engine = new DeviceManager.Engine(
     },
     {
         deviceId: deviceId,
-        properties: {
-            name: deviceName,
-            type: deviceType,
-            isOnline: true,
-            rotation: 0
+        deviceName: deviceName,
+        deviceType: deviceType,
+        deviceConfiguration: {
+            pin1: pin1Number,
+            pin2: pin2Number,
+            pin3: pin3Number,
+            pin4: pin4Number,
+            position: 0,
+            maxPosition: 22,
+        },
+        deviceState: {
+            rotation: 0,
+            isOnline: true
         }
-    }, 
-    {
-        pin1: pin1Number,
-        pin2: pin2Number,
-        pin3: pin3Number,
-        pin4: pin4Number,
-        position: 0,
-        maxPosition: 22,
     }
 );
 

@@ -1,6 +1,6 @@
 {
   "name": "@device-management/device-engine",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "The software for step motor control.",
   "license": "MIT",
   "repository": "https://github.com/device-management/device-engine",
@@ -15,7 +15,7 @@
     "build": "tsc --pretty"
   },
   "dependencies": {
-    "@device-management/device-base": "0.0.1",
+    "@device-management/device-base": "0.1.0",
     "onoff": "1.1.2"
   },
   "devDependencies": {

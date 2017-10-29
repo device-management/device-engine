@@ -14,22 +14,15 @@ export namespace DeviceManager {
         private out3: Gpio;
         private out4: Gpio;
 
-        constructor(
-            mqttConfig: MqttConfig,
-            deviceDescription: DeviceDescription,
-            private engineConfig: EngineConfig) {
-            super(mqttConfig, deviceDescription);
-        }
-
         doStart(): Observable<any> {
             console.log("Starting engine controller...")
-            this.out1 = new Gpio(this.engineConfig.pin1, "out");
-            this.out2 = new Gpio(this.engineConfig.pin2, "out");
-            this.out3 = new Gpio(this.engineConfig.pin3, "out");
-            this.out4 = new Gpio(this.engineConfig.pin4, "out");
+            this.out1 = new Gpio(this.device.configuration.pin1, "out");
+            this.out2 = new Gpio(this.device.configuration.pin2, "out");
+            this.out3 = new Gpio(this.device.configuration.pin3, "out");
+            this.out4 = new Gpio(this.device.configuration.pin4, "out");
             let start = super.doStart();
             start.subscribe(() => { }, () => { }, () => {
-                let topic = "devices/" + this.deviceDescription.deviceId + "/command";
+                let topic = "devices/" + this.device.id + "/command";
                 console.log("Subscribing topic: " + topic);
                 this.mqttClient.subscribe(topic);
             });
@@ -40,16 +33,16 @@ export namespace DeviceManager {
             let self = this;
             return (topic, message) => {
                 console.log("Recived message from mqtt. Topic: " + topic + ", Message: " + message);
-                if (topic == "devices/" + self.deviceDescription.deviceId + "/command") {
+                if (topic == "devices/" + self.device.id + "/command") {
                     var command = JSON.parse(message);
-                    if (command.properties.hasOwnProperty("rotation")) {
-                        self.rotate(command.properties.rotation, () => {
+                    if (command.state.hasOwnProperty("rotation")) {
+                        self.rotate(command.state.rotation, () => {
                             self.mqttClient.publish(
-                                "devices/" + self.deviceDescription.deviceId + "/state",
+                                "devices/" + self.device.id + "/state",
                                 JSON.stringify({
-                                    deviceId: self.deviceDescription.deviceId,
-                                    properties: {
-                                        rotation: command.properties.rotation
+                                    id: self.device.id,
+                                    state: {
+                                        rotation: command.state.rotation
                                     }
                                 }),
                                 {
@@ -68,10 +61,10 @@ export namespace DeviceManager {
                 error();
                 return;
             }
-            let targetPosition = this.engineConfig.maxPosition * rotation / 100;
-            let rotationsLeft = Math.abs(targetPosition - this.engineConfig.position);
+            let targetPosition = this.device.configuration.maxPosition * rotation / 100;
+            let rotationsLeft = Math.abs(targetPosition - this.device.configuration.position);
             let cyclesLeft = Math.round(rotationsLeft * this.stepsCount);
-            let isClockwise = targetPosition > this.engineConfig.position;
+            let isClockwise = targetPosition > this.device.configuration.position;
             let currentStep = 0;
             let stepProgress = isClockwise ? function () {
                 currentStep++;
@@ -87,7 +80,7 @@ export namespace DeviceManager {
             let self = this;
             this.interval = setInterval(function () {
                 if (cyclesLeft == 0) {
-                    self.engineConfig.position = targetPosition;
+                    self.device.configuration.position = targetPosition;
                     clearInterval(self.interval);
                     self.interval = null;
                     success();
@@ -107,15 +100,6 @@ export namespace DeviceManager {
             this.out4.writeSync((step & 0b1000) >> 3);
         }
 
-    }
-
-    export interface EngineConfig {
-        pin1: number;
-        pin2: number;
-        pin3: number;
-        pin4: number;
-        position: number;
-        maxPosition: number;
     }
 
 }
