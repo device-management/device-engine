@@ -14,10 +14,10 @@ let engine = new DeviceManager.Engine(
         brokerAddress: mqttAddress
     },
     {
-        deviceId: deviceId,
-        deviceName: deviceName,
-        deviceType: deviceType,
-        deviceConfiguration: {
+        id: deviceId,
+        name: deviceName,
+        type: deviceType,
+        configuration: {
             pin1: pin1Number,
             pin2: pin2Number,
             pin3: pin3Number,
@@ -25,7 +25,7 @@ let engine = new DeviceManager.Engine(
             position: 0,
             maxPosition: 22,
         },
-        deviceState: {
+        state: {
             rotation: 0,
             isOnline: true
         }
